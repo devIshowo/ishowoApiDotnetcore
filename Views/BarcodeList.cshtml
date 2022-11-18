@@ -1,0 +1,60 @@
+@model ItCommerce.Reporting.ViewModels.BarcodeListModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CODES BARRES</title>
+    <meta name="author" content="harnishdesign.net" />
+
+    <!-- Web Fonts
+    ======================= -->
+    <!-- Stylesheet
+    ======================= -->
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/css/styleboot.css" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/vendor/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/css/stylesheet.css" />
+</head>
+<body>
+    <!-- Container -->
+    <div class="container-fluid invoice-container">
+        <!-- Header -->
+        <main>
+            <div id="main5">
+                <div class="text-4 text-center"><strong>LISTE DES CODES BARRES</strong></div>
+            </div>
+            <hr />
+            <br />
+            @{ var inc = 0; }
+            @foreach (var line in @Model.barcodes)
+            {
+                <div class="card" style="display: inline-block; padding: 2px; margin: 0px;border:none; border-radius:0px; border-bottom: 1px solid #e5e6e7; ">
+                    <div id="main6 card" style="font-family: sans-serif;">
+                        <div class="goRight6">
+                            <span class="barcode_item">
+                                <div class="text-center"><img class="code" id='base64image' src='@line.base64Image' /></div>
+                                <div class="description text-center">@line.description</div>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            }
+        </main>
+        <!-- Footer -->
+        <br /><br /><br />
+        <footer class="text-center mt-4">
+            <p class="text-1"><strong>--- FIN ---</strong></p>
+            <hr />
+            <div class="main2">
+                <div class="goLeft2 text-start">
+                    Imprimée ce @Model.datePrint.ToString("dd/MM/yyyy à HH:mm")
+                </div>
+                <div class="goRight2 text-end">Par ISHOWO APP</div>
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>

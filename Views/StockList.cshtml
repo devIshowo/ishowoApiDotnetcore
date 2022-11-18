@@ -1,0 +1,112 @@
+@model ItCommerce.Reporting.ViewModels.StockViewModel
+@functions{
+    string formatMoney(double amount)
+    {
+        var format = String.Format("{0:### ### ###}", amount);
+        if (amount == 0)
+        {
+            format = "0";
+        }
+        return format;
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>STOCKS</title>
+    <meta name="author" content="harnishdesign.net" />
+
+    <!-- Web Fonts
+    ======================= -->
+    <!-- Stylesheet
+    ======================= -->
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/css/styleboot.css" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/vendor/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/css/stylesheet.css" />
+</head>
+<body>
+    <!-- Container -->
+    <div class="container-fluid invoice-container">
+        <!-- Header -->
+        <header>
+            <div id="main1">
+                <div class="goLeft1"> <img src="http://localhost:5300/images/stocks.png" title="Koice" alt="Koice" width="60%" /></div>
+                <div class="goRight1">
+                    <h1 class="text-5 mb-0"><strong> @Model.company.name</strong></h1><br />
+                    <i class="fa fa-map-marker"></i><strong> Adresse: </strong><span>@Model.company.address</span><br />
+                    <i class="fa fa-phone-square"></i><strong> Téléphone: </strong><span>@Model.company.phone</span><br />
+                    <i class="fa fa-envelope-square"></i><strong> Email:</strong><span>@Model.company.email</span>
+                </div>
+            </div>
+            <br />
+            <hr />
+        </header>
+        <br />
+        <!-- Main Content -->
+        <main>
+            <div id="main4">
+                <div class="goLeft4 text-3"><strong>LISTE DES STOCKS DE PRODUITS</strong></div>
+                <div class="goRight4 text-3">
+                    <strong>NOMBRE DE PRODUITS :</strong> @(Model.stockList.Count) PRODUITS <br />
+                    <strong>TOTAL PRIX D'ACHAT :</strong> @formatMoney(Model.stockList.Sum(x=>x.purchase_price * x.quantity)) FCFA <br />
+                    <strong>TOTAL PRIX DE VENTE :</strong> @formatMoney(Model.stockList.Sum(x=>x.selling_price * x.quantity)) FCFA <br />
+                    <strong>BENEFICE :</strong> @formatMoney(Model.stockList.Sum(x=>x.selling_price * x.quantity) - Model.stockList.Sum(x=>x.purchase_price * x.quantity)) FCFA
+                </div>
+            </div>
+            <hr />
+            <br />
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="card-header">
+                                <tr>
+                                    <td class="col-2 text-start"><strong>Ref.</strong></td>
+                                    <td class="col-2 text-end"><strong>Libellé</strong></td>
+                                    <td class="col-2 text-end"><strong>Catégorie</strong></td>
+                                    <td class="col-2 text-end"><strong>Rayon</strong></td>
+                                    <td class="col-1 text-center"><strong>Stock</strong></td>
+                                    <td class="col-2 text-end"><strong>P.Achat</strong></td>
+                                    <td class="col-2 text-end"><strong>P.Vente</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var inc = 0; }
+                                @foreach (var line in @Model.stockList)
+                                {
+                                    inc++;
+                                    <tr>
+                                        <td class="col-2 text-start">@line.barcode</td>
+                                        <td class="col-2 text-end">@line.product.product.name</td>
+                                        <td class="col-2 text-end">@line.product.product.category.name</td>
+                                        <td class="col-2 text-end">@line.compartment.name</td>
+                                        <td class="col-1 text-center">@line.quantity</td>
+                                        <td class="col-2 text-end">>@formatMoney(line.purchase_price) <small>FCFA</small></td>
+                                        <td class="col-2 text-end">@formatMoney(line.selling_price) <small>FCFA</small></td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Footer -->
+        <br /><br /><br />
+        <footer class="text-center mt-4">
+            <p class="text-1"><strong>--- FIN ---</strong></p>
+            <hr />
+            <div class="main2">
+                <div class="goLeft2 text-start">
+                    Imprimée ce @Model.datePrint.ToString("dd/MM/yyyy à HH:mm")
+                </div>
+                <div class="goRight2 text-end">Par ISHOWO APP</div>
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>

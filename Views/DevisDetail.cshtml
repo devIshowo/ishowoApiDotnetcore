@@ -1,0 +1,206 @@
+@model ItCommerce.Reporting.ViewModels.SaleDetailView
+@functions{
+    string formatMoney(double amount)
+    {
+        var format = String.Format("{0:### ### ###}", amount);
+        if (amount == 0)
+        {
+            format = "0";
+        }
+        return format;
+    }
+
+    string formatCode(string code)
+    {
+        string format;
+        var format1 = code.Substring(0, 4);
+        var format2 = code.Substring(4, 4);
+        var format3 = code.Substring(8, 4);
+        var format4 = code.Substring(12, 4);
+        var format5 = code.Substring(16, 4);
+        var format6 = code.Substring(20, 4);
+
+        format = format1 +"-"+ format2 + "-" + format3 + "-" + format4 + "-" + format5 + "-" + format6;
+        return format;
+    }
+
+    string formatMecefDate(string date)
+    {
+        string format;
+        var year = date.Substring(0, 4);
+        var month = date.Substring(4, 2);
+        var day = date.Substring(6, 2);
+        var heure = date.Substring(8, 2);
+        var min = date.Substring(10, 2);
+        var sec = date.Substring(12, 2);
+
+        format = day + "/" + month + "/" + year + " "+ " " + heure + ":" + min + ":" + sec;
+        return format;
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scal e=1" />
+    <title>DEVIS No @Model.saleDetail.id - @Model.saleDetail.agent.agency.company.name</title>
+    <meta name="author" content="harnishdesign.net" />
+
+    <!-- Web Fonts
+    ======================= -->
+    <!-- Stylesheet
+    ======================= -->
+    <link rel="stylesheet" type="text/css" href="@Model.baseUrl/css/styleboot.css" />
+    <link rel="stylesheet" type="text/css" href="@Model.baseUrl/vendor/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="@Model.baseUrl/css/stylesheet.css" />
+</head>
+<body>
+    <!-- Container -->
+    <div class="container-fluid invoice-container">
+        <!-- Header -->
+        <header>
+            <div id="main1">
+                <div class="goLeft1"> <img src="@Model.baseUrl/images/devis.png" title="Koice" alt="Koice" width="60%" /></div>
+                <div class="goRight1">
+                    <h1 class="text-5 mb-0"><strong> IWAJU TECH</strong></h1><br />
+                    <i class="fa fa-"></i><strong> IFU: </strong><span>1201402572907</span><br />
+                    <i class="fa fa-map-marker"></i><strong> Adresse: </strong><span>@Model.saleDetail.agent.agency.company.address</span><br />
+                    <i class="fa fa-phone-square"></i><strong> Téléphone: </strong><span>@Model.saleDetail.agent.agency.company.phone</span><br />
+                    @*<i class="fa fa-envelope-square"></i><strong> Email:</strong><span>@Model.saleDetail.agent.agency.company.email</span>*@
+
+                </div>
+            </div>
+            <br />
+            <hr />
+        </header>
+        <br />
+        <!-- Main Content -->
+        <main>
+            <div id="main2">
+                <div class="goLeft2">
+                    <strong>Date:</strong> @Model.saleDetail.date.ToString("dd/MM/yyyy à HH:mm")
+                </div>
+                <div class="goRight2"> <strong>DEVIS №:</strong>  @Model.saleDetail.reference</div>
+            </div>
+            <hr />
+            <br />
+            <div id="main3">
+                <div class="goLeft3">
+                    <strong>Délivrée Par :</strong>
+                    <address>
+                        <i class="fa fa-user-tie"></i> <strong> @Model.saleDetail.agent.user.firstname</strong><br />
+                        @*<i class="fa fa-user-tie"></i> <strong> Adama</strong><br />*@
+                        @*<i class="fa fa-phone-volume"></i> @Model.saleDetail.agent.user.phone<br />*@
+                        @*<i class="fa fa-envelope"></i> @Model.saleDetail.agent.user.email*@
+                    </address>
+                </div>
+                <div class="goRight3">
+
+                    @if (Model.saleDetail.customer.nom != null)
+                    {
+                        <strong>Délivrée À :</strong>
+                        <address>
+                            <i class="fa fa-user-alt"></i><strong> @Model.saleDetail.customer.nom @Model.saleDetail.customer.prenom</strong><br />
+                            <i class="fa fa-phone-volume"></i> @Model.saleDetail.customer.telephone<br />
+                            <i class="fa fa-envelope"></i> @Model.saleDetail.customer.email<br />
+                        </address>
+                    }
+
+                    @if (Model.saleDetail.customer.social_reason != null)
+                    {
+                        <strong>Délivrée À :</strong>
+                        <address>
+                            <i class="fa fa-building"></i><strong> @Model.saleDetail.customer.social_reason</strong><br />
+                            <strong>IFU :</strong> @Model.saleDetail.customer.num_ifu<br />
+                            <i class="fa fa-phone-volume"></i> @Model.saleDetail.customer.telephone<br />
+                            <i class="fa fa-envelope"></i> @Model.saleDetail.customer.email <br />
+                        </address>
+                    }
+
+                    @if (Model.saleDetail.customer.nom == null && Model.saleDetail.customer.social_reason == null)
+                    {
+                        <strong>Délivrée À :</strong>
+                        <address>
+                            <i class="fa fa-user-secret"></i> <span>CLIENT ANONYME </span><br />
+                        </address>
+                    }
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="card-header">
+                                <tr>
+                                    <td class="col-1"><strong>№</strong></td>
+                                    <td class="col-4"><strong>Désignation</strong></td>
+                                    <td class="col-2 text-center"><strong>Remise</strong></td>
+                                    <td class="col-1 text-center"><strong>Quantité</strong></td>
+                                    <td class="col-2 text-center"><strong>Prix Unitaire</strong></td>
+                                    <td class="col-3 text-end"><strong>Montant</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var inc = 0; }
+                                @foreach (var line in @Model.saleDetail.lines)
+                                {
+                                    inc++;
+                                    <tr>
+                                        <td class="col-1">@inc</td>
+                                        <td class="col-4 text-1">@line.product.product.name (@line.tax)</td>
+                                        <td class="col-2 text-center">@formatMoney(line.mt_remise) <small>FCFA</small></td>
+                                        <td class="col-1 text-center">@line.quantite</td>
+                                        <td class="col-2 text-center">@formatMoney(line.p_vente) <small>FCFA</small></td>
+                                        <td class="col-3 text-end">@formatMoney((line.p_vente * line.quantite) - line.mt_remise) <small>FCFA</small></td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot class="card-footer">
+                                <tr>
+                                    <td colspan="5" class="text-end"><strong>TOTAL HT :</strong></td>
+                                    <td class="text-end">@formatMoney(Model.saleDetail.amount_original - Model.saleDetail.amount_remise) <small>FCFA</small></td>
+                                </tr>
+                                @if (Model.saleDetail.amount_tva > 0)
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-end"><strong>TOTAL TVA (18%) :</strong></td>
+                                        <td class="text-end">@formatMoney(Model.saleDetail.amount_tva) <small>FCFA</small></td>
+                                    </tr>
+                                }
+
+                                @if (Model.saleDetail.taux_aib > 0)
+                                {
+                                    <tr>
+                                        <td colspan="5" class="text-end"><strong>Total AIB (@Model.saleDetail.taux_aib %) :</strong></td>
+                                        <td class="text-end">@formatMoney(Model.saleDetail.amount_aib) <small>FCFA</small></td>
+                                    </tr>
+                                }
+
+                                <tr>
+                                    <td colspan="5" class="text-end text-5"><strong>TOTAL TTC :</strong></td>
+                                    <td class="text-end text-2" style="text-decoration: underline;"><strong>@formatMoney(Model.saleDetail.amount_to_pay)</strong><small> FCFA</small></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+      
+        </main>
+        <!-- Footer -->
+        <br /><br /><br />
+        <footer class="text-center mt-4">
+            <hr />
+            <div class="main2">
+                <div class="goLeft2 text-start">
+                    Imprimée ce @Model.datePrint.ToString("dd/MM/yyyy à HH:mm")
+                </div>
+                <div class="goRight2 text-end">Par ISHOWO</div>
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>

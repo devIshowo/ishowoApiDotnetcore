@@ -1,0 +1,173 @@
+@functions{
+    string formatMoney(double amount)
+    {
+        var format = String.Format("{0:### ### ###}", amount);
+        if (amount == 0)
+        {
+            format = "0";
+        }
+        return format;
+    }
+
+    string formatCode(string code)
+    {
+        string format;
+        var format1 = code.Substring(0, 4);
+        var format2 = code.Substring(4, 4);
+        var format3 = code.Substring(8, 4);
+        var format4 = code.Substring(12, 4);
+        var format5 = code.Substring(16, 4);
+        var format6 = code.Substring(20, 4);
+
+        format = format1 + "-" + format2 + "-" + format3 + "-" + format4 + "-" + format5 + "-" + format6;
+        return format;
+    }
+
+    string formatMecefDate(string date)
+    {
+        string format;
+        var year = date.Substring(0, 4);
+        var month = date.Substring(4, 2);
+        var day = date.Substring(6, 2);
+        var heure = date.Substring(8, 2);
+        var min = date.Substring(10, 2);
+        var sec = date.Substring(12, 2);
+
+        format = day + "/" + month + "/" + year + " " + " " + heure + ":" + min + ":" + sec;
+        return format;
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scal e=1" />
+    <title>FACTURE No 5 - ISHOWO TEST2</title>
+    <meta name="author" content="harnishdesign.net" />
+
+    <!-- Web Fonts
+    ======================= -->
+    <!-- Stylesheet
+    ======================= -->
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/css/stylesheet.css" />
+</head>
+<body>
+    <!-- Container -->
+    <div class="container-fluid invoice-container">
+        <!-- Header -->
+        <header>
+            <div id="main1">
+                <div class="goLeft1"> <img src="http://localhost:5300/images/facture.png" title="Koice" alt="Koice" width="60%" /></div>
+                <div class="goRight1">
+                    <h1 class="text-5 mb-0"><strong> IWAJU TECH</strong></h1><br />
+                    <i class="fa fa-map-marker"></i><strong> IFU: </strong><span>1201402572907</span><br />
+                    <i class="fa fa-map-marker"></i><strong> Adresse: </strong><span>Calavi</span><br />
+                    <i class="fa fa-phone-square"></i><strong> Téléphone: </strong><span>95252588525</span><br />
+                    @*<i class="fa fa-envelope-square"></i><strong> Email:</strong><span>@Model.saleDetail.agent.agency.company.email</span>*@
+
+                </div>
+            </div>
+            <br />
+            <hr />
+        </header>
+        <br />
+        <!-- Main Content -->
+        <main>
+            <div id="main2">
+                <div class="goLeft2">
+                    <strong>Date:</strong> 02/12/2021
+                </div>
+                <div class="goRight2"> <strong>Facture №:</strong>  0000552558</div>
+            </div>
+            <hr />
+            <br />
+            <div id="main3">
+                <div class="goLeft3">
+                    <strong>Délivrée Par :</strong>
+                    <address>
+                        @*<i class="fa fa-user-tie"></i> <strong> @Model.saleDetail.agent.user.lastname @Model.saleDetail.agent.user.firstname</strong><br />*@
+                        <i class="fa fa-user-tie"></i> <strong> Adama</strong><br />
+                        @*<i class="fa fa-phone-volume"></i> @Model.saleDetail.agent.user.phone<br />*@
+                        @*<i class="fa fa-envelope"></i> @Model.saleDetail.agent.user.email*@
+                    </address>
+                </div>
+                <div class="goRight3">
+
+                    <strong>Délivrée À :</strong>
+                    <address>
+                        <i class="fa fa-user-alt"></i><strong> TESTNOM TESTPRENOM</strong><br />
+                        <i class="fa fa-phone-volume"></i> 441552222<br />
+                        <i class="fa fa-envelope"></i> TEST@GMAIL.COM<br />
+                    </address>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="card-header">
+                                <tr>
+                                    <td class="col-1"><strong>№</strong></td>
+                                    <td class="col-4"><strong>Désignation</strong></td>
+                                    <td class="col-2 text-center"><strong>Remise</strong></td>
+                                    <td class="col-1 text-center"><strong>Quantité</strong></td>
+                                    <td class="col-2 text-center"><strong>Prix Unitaire</strong></td>
+                                    <td class="col-3 text-end"><strong>Montant</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr>
+                                    <td class="col-1">1</td>
+                                    <td class="col-4 text-1">CHOCOLAT</td>
+                                    <td class="col-2 text-center">@formatMoney(0) <small>FCFA</small></td>
+                                    <td class="col-1 text-center">3</td>
+                                    <td class="col-2 text-center">@formatMoney(5000) <small>FCFA</small></td>
+                                    <td class="col-3 text-end">@formatMoney(15000) <small>FCFA</small></td>
+                                </tr>
+                            </tbody>
+                            <tfoot class="card-footer">
+                                <tr>
+                                    <td colspan="5" class="text-end"><strong>Sous-Total :</strong></td>
+                                    <td class="text-end">@formatMoney(15000) <small>FCFA</small></td>
+                                </tr>
+
+                                <tr>
+                                    <td colspan="5" class="text-end text-5"><strong>NET A PAYER :</strong></td>
+                                    <td class="text-end text-2" style="text-decoration: underline;"><strong>@formatMoney(15000)</strong><small> FCFA</small></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-end"><strong>Montant Reçu :</strong></td>
+                                    <td class="text-end">
+                                        @formatMoney(50000) <small>FCFA</small>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5" class="text-end"><strong>Reliquat :</strong></td>
+                                    <td class="text-end">@formatMoney(35000) <small>FCFA</small></td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+        <!-- Footer -->
+        <br /><br /><br />
+        <footer class="text-center mt-4">
+            <p class="text-1"><strong>--- NOUS VOUS REMERCIONS DE VOTRE CONFIANCE <i class="fa fa-thumbs-up"></i> &nbsp;---</strong></p>
+            <hr />
+            <div class="main2">
+                <div class="goLeft2 text-start">
+                    Imprimée ce 02/12/2021
+                </div>
+                <div class="goRight2 text-end">Par ISHOWO APP</div>
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>

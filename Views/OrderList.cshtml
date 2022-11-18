@@ -1,0 +1,142 @@
+@model ItCommerce.Reporting.ViewModels.OrderViewModel
+@functions{
+    string formatMoney(double amount)
+    {
+        var format = String.Format("{0:### ### ###}", amount);
+        if (amount == 0)
+        {
+            format = "0";
+        }
+        return format;
+    }
+
+    string sendSupplier(ItCommerce.Business.Entities.Supplier supplier)
+    {
+        string fournisseur;
+        if (supplier == null)
+        {
+            fournisseur = "FOURNISSEUR ANONYME";
+        }
+        else if (supplier.name != null)
+        {
+            fournisseur = supplier.name + " " + supplier.phone;
+        }
+        else
+        {
+            fournisseur = "FOURNISSEUR ANONYME";
+        }
+        return fournisseur;
+    }
+
+    string sendStatut(ItCommerce.Business.Entities.Order commande)
+    {
+        string statut;
+        if (commande.amount_paid < commande.amount)
+        {
+            statut = "NON SOLDÉE";
+        }
+        else
+        {
+            statut = "SOLDÉ";
+        }
+
+        return statut;
+    }
+
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VENTES DU @Model.param.startDate.ToString("dd/MM/yyyy") AU  @Model.param.endDate.ToString("dd/MM/yyyy")</title>
+    <meta name="author" content="harnishdesign.net" />
+
+    <!-- Web Fonts
+    ======================= -->
+    <!-- Stylesheet
+    ======================= -->
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/css/styleboot.css" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/vendor/font-awesome/css/all.min.css" />
+    <link rel="stylesheet" type="text/css" href="http://localhost:5300/css/stylesheet.css" />
+</head>
+<body>
+    <!-- Container -->
+    <div class="container-fluid invoice-container">
+        <!-- Header -->
+        <header>
+            <div id="main1">
+                <div class="goLeft1"> <img src="http://localhost:5300/images/commandes.png" title="Koice" alt="Koice" width="60%" /></div>
+                <div class="goRight1">
+                    <h1 class="text-5 mb-0"><strong> @Model.param.agent.agency.company.name</strong></h1><br />
+                    <i class="fa fa-map-marker"></i><strong> Adresse: </strong><span>@Model.param.agent.agency.company.address</span><br />
+                    <i class="fa fa-phone-square"></i><strong> Téléphone: </strong><span>@Model.param.agent.agency.company.phone</span><br />
+                    <i class="fa fa-envelope-square"></i><strong> Email:</strong><span>@Model.param.agent.agency.company.email</span>
+                </div>
+            </div>
+            <br />
+            <hr />
+        </header>
+        <br />
+        <!-- Main Content -->
+        <main>
+            <div id="main2">
+                <div class="goLeft2 text-3"><strong>LISTE DES COMMANDES DU @Model.param.startDate.ToString("dd/MM/yyyy") AU  @Model.param.endDate.ToString("dd/MM/yyyy")</strong></div>
+                <div class="goRight2 text-4"> <strong>TOTAL:</strong> @formatMoney(Model.orderList.Sum(x => x.amount)) FCFA</div>
+            </div>
+            <hr />
+            <br />
+            <div class="card">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table mb-0">
+                            <thead class="card-header">
+                                <tr>
+                                    <td class="col-1"><strong>№</strong></td>
+                                    <td class="col-2 text-center"><strong>Date</strong></td>
+                                    <td class="col-2 text-center"><strong>Nb. Produits</strong></td>
+                                    <td class="col-2 text-end"><strong>Mt. Cmde</strong></td>
+                                    <td class="col-2 text-end"><strong>Mt. Payé</strong></td>
+                                    <td class="col-1 text-center"><strong>Statut</strong></td>
+                                    <td class="col-3 text-end"><strong>Fournisseur</strong></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var inc = 0; }
+                                @foreach (var sale in @Model.orderList)
+                                {
+                                    inc++;
+                                    <tr>
+                                        <td class="col-1">@inc</td>
+                                        <td class="col-2 text-center">@sale.date.ToString("dd/MM/yyyy HH:mm")</td>
+                                        <td class="col-2 text-center">@sale.product_lines.Count</td>
+                                        <td class="col-2 text-end">@formatMoney(sale.amount) <small>FCFA</small></td>
+                                        <td class="col-2 text-end">@formatMoney(sale.amount_paid) <small>FCFA</small></td>
+                                        <td class="col-1 text-center"><strong> @sendStatut(sale)</strong></td>
+                                        <td class="col-3 text-end">@sendSupplier(sale.supplier)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- Footer -->
+        <br /><br /><br />
+        <footer class="text-center mt-4">
+            <p class="text-1"><strong>--- FIN ---</strong></p>
+            <hr />
+            <div class="main2">
+                <div class="goLeft2 text-start">
+                    Imprimée ce @Model.datePrint.ToString("dd/MM/yyyy à HH:mm")
+                </div>
+                <div class="goRight2 text-end">Par ISHOWO APP</div>
+            </div>
+        </footer>
+
+    </div>
+</body>
+</html>
